@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+</head>
+<style>
+#container{
+    width: 600px;
+    height: 600px;
+    background-color: #2E9EE3;
+    position: absolute;
+    overflow: hidden;
+}
+
+</style>
+<script src="../js/lib.js"></script>
+<script src="./GameObject.js"></script>
+<script src="./ObjectManager.js"></script>
+<script src="./Ball.js"></script>
+<script src="./Pic.js"></script>
+<!-- <script src="./Sensor.js"></script> -->    
+<script>
+var ballArray=[];
+var loopFlag=true;
+var flag=false;
+var pic;    
+var objectManager;
+var sensor;
+addEventListener("load",function(){
+    objectManager = new ObjectManager();
+    createBall();
+    createPic();
+    // createSensor();
+    gameLoop();
+
+    document.body.addEventListener("keydown",function(e){
+            if(e.keyCode==32){
+                for(var i=0; i<50;i++){
+                    var f =  getRandom(25,30);
+                    var a = getRandom(1,3);
+                    var b = getRandom(1,3);
+                    var c = getRandom(0,100);
+                    var d = getRandom(0,100);
+                   
+                    ball = new Ball("Ball",container,"../images/ball1.webp",f,f,a,b,c,d);
+                    ballArray.push(ball);
+                    objectManager.addObject(ball);
+                }
+            }
+    });
+    document.body.addEventListener("mousemove",function(){
+        follow();
+    });
+});
+function createBall(){
+    ball = new Ball("Ball",container,"../images/ball1.webp",10,10,1,1,0,0);
+    ballArray.push(ball);
+    objectManager.addObject(ball);
+}
+function createPic(){
+   pic = new Pic("Pic",container,"../images/pic.png",15,15,0,0,100,100);
+   objectManager.addObject(pic);
+}
+// function createSensor(){
+//     sensor = new Sensor("sensor",container,"",15,15,0,0,pic.x,pic.y);
+//     objectManager.addObject(sensor);
+// }
+function follow(){
+    pic.x=parseInt(event.clientX)-15;
+    pic.y=parseInt(event.clientY)-15;
+    
+    pic.div.style.left = pic.x+"px";
+    pic.div.style.top = pic.y+"px";
+
+    // sensor.div.style.left = pic.x+"px";
+    // sensor.div.style.top = pic.y+"px";
+}
+function gameLoop(){
+    objectManager.tick();
+    objectManager.render();
+    setTimeout("gameLoop()",10);
+}
+
+</script>
+<body>
+    <div id="container"></div>  
+</body>
+</html>
